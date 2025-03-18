@@ -1,0 +1,37 @@
+# C# Build output
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.nuget
+
+# User-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+*.sln.DotSettings
+*.csproj.user
+
+# Package directories
+packages/
+node_modules/
+
+# JetBrains / Rider IDE files
+riderModule.iml
+/.idea/
+/_ReSharper.Caches/
+
+# Rust build output
+/target/
+/Cargo.lock
+
+# Rust editor files
+**/*.rs.bk
+/.cargo/
+/cargotest/
+/rustfmt.toml
+

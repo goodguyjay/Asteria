@@ -1,0 +1,10 @@
+[package]
+name = "asn-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+asn-comm = { path = "../asn-comm" }
+asn-argus = { path = "../asn-argus" }
+asn-db = { path = "../asn-db" }
+tokio = { version = "1", features = ["full"] }
