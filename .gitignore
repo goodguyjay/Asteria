@@ -1,3 +1,9 @@
+# rust
+debug/
+target/
+**/*.rs.bk
+*.pdb
+
 # C# Build output
 bin/
 obj/
@@ -34,4 +40,3 @@ riderModule.iml
 /.cargo/
 /cargotest/
 /rustfmt.toml
-
