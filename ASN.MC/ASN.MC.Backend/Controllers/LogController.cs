@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace ASN.MC.Backend.Controllers;
 
-public class LogController
+public sealed class LogController : ControllerBase
 {
     
 }

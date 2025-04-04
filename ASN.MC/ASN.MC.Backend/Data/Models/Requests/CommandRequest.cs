@@ -1,6 +1,6 @@
 namespace ASN.MC.Backend.Data.Models.Requests;
 
-public class CommandRequest
+public sealed class CommandRequest
 {
-    
+    public required string Command { get; set; }
 }

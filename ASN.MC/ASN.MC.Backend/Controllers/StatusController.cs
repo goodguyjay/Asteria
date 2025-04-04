@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace ASN.MC.Backend.Controllers;
 
-public class StatusController
+public sealed class StatusController : ControllerBase
 {
     
 }

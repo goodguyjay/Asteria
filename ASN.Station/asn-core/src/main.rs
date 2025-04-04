@@ -1,4 +1,14 @@
+mod handler;
+mod queue;
+mod server;
+mod telemetry;
+mod utils;
+
 fn main() {
-    println!("Asteria Space Network Core booting...");
-    asn_comm::initialize();
+    asn_info!("Starting Asteria Core System...");
+
+    queue::init();
+    telemetry::init();
+
+    server::start();
 }
