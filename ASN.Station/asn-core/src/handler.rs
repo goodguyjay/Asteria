@@ -1,4 +1,4 @@
-use crate::queue::{TASK_QUEUE, Task, TaskPriority};
+use crate::queue::{TASK_QUEUE, TASK_STATUS_MAP, Task, TaskPriority, TaskStatus};
 use crate::{asn_debug, asn_err, asn_info};
 use std::io::{Read, Write};
 use std::net::TcpStream;
@@ -10,6 +10,27 @@ pub fn handle_client(mut stream: TcpStream) {
         Ok(size) => {
             let command = String::from_utf8_lossy(&buffer[..size]);
             asn_info!("Received command: {}", command);
+
+            if command.to_uppercase() == "GET_ALL" {
+                let status_map = TASK_STATUS_MAP.lock().unwrap();
+                let queue = TASK_QUEUE.lock().unwrap();
+
+                let mut response = String::new();
+
+                for task in queue.iter() {
+                    let status = status_map.get(&task.id).unwrap_or(&task.status);
+                    response.push_str(&format!(
+                        "[{}] {:?} | {:?} | {} \n",
+                        task.id,
+                        task.priority,
+                        status,
+                        task.commands.join("; ")
+                    ));
+                }
+
+                stream.write_all(response.as_bytes()).unwrap();
+                return;
+            }
 
             let commands: Vec<String> = command
                 .split(';')
@@ -29,6 +50,7 @@ pub fn handle_client(mut stream: TcpStream) {
             }
 
             let mut queue = TASK_QUEUE.lock().unwrap();
+            let mut status_map = TASK_STATUS_MAP.lock().unwrap();
 
             if priorities_found.len() > 1 {
                 asn_debug!("Mixed priority batch received.");
@@ -38,17 +60,20 @@ pub fn handle_client(mut stream: TcpStream) {
 
             for task in tasks {
                 queue.push_back(task.clone());
+                status_map.insert(task.id, TaskStatus::Pending);
 
                 asn_debug!(
-                    "Task queued: [{}] '{}' | Priority: {:?} | Queue size: {}",
+                    "Task queued: [{}] '{}' | Priority: {:?} | Queue size: {} | Status: {:?}",
                     task.id,
                     task.commands.join("; "),
                     task.priority,
-                    queue.len()
+                    queue.len(),
+                    task.status
                 );
             }
 
             drop(queue);
+            drop(status_map);
 
             let response = format!("Command '{}' executed.", command);
             stream.write_all(response.as_bytes()).unwrap();
