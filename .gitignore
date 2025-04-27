@@ -1,10 +1,57 @@
-# rust
-debug/
-target/
-**/*.rs.bk
-*.pdb
+# ------------------
+# C++ Build Output
+# ------------------
 
-# C# Build output
+# Compiled Object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+asn_station
+ASN-Station
+
+# Build Folders
+/build/
+build/
+cmake-build-debug/
+cmake-build-release/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# Logs
+*.log
+
+# Backup files
+*~
+*.swp
+*.swo
+*.bak
+
+# Coverage reports
+coverage/
+
+# Precompiled headers
+Common/pch.hpp.gch
+
+# ------------------
+# C# Build Output
+# ------------------
+
+# Build output
 bin/
 obj/
 *.dll
@@ -13,8 +60,6 @@ obj/
 *.nuget
 
 # User-specific files
-.vscode/
-.idea/
 *.suo
 *.user
 *.userosscache
@@ -22,21 +67,28 @@ obj/
 *.sln.DotSettings
 *.csproj.user
 
-# Package directories
+# Packages
 packages/
 node_modules/
 
-# JetBrains / Rider IDE files
+# ------------------
+# IDE / Editor Files
+# ------------------
+
+# JetBrains (CLion, Rider)
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Rider
 riderModule.iml
 /.idea/
 /_ReSharper.Caches/
 
-# Rust build output
-/target/
-/Cargo.lock
-
-# Rust editor files
-**/*.rs.bk
-/.cargo/
-/cargotest/
-/rustfmt.toml
+# ------------------
+# System / OS Files
+# ------------------
+.DS_Store
+Thumbs.db

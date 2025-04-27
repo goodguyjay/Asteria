@@ -1,3 +1,0 @@
-[workspace]
-members = ["asn-core", "asn-comm", "asn-argus", "asn-db"]
-resolver = "2"                                            # latest cargo deps
