@@ -4,5 +4,6 @@
 
 #include "Logger.hpp"
 
-namespace ASN {
-} // ASN
+namespace asn
+{
+} // namespace asn
