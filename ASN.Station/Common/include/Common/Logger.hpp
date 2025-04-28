@@ -5,13 +5,13 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
-namespace asn
+namespace ASNLogger
 {
 
 class Logger
 {
   public:
-    static void init()
+    static void Init()
     {
         if (!_logger)
         {
@@ -59,10 +59,10 @@ class Logger
     static inline std::shared_ptr<spdlog::logger> _logger = nullptr;
 };
 
-} // namespace asn
+} // namespace ASNLogger
 
 // Macro wrappers
-#define ASN_LOG(message) ::asn::Logger::log(message)
-#define ASN_ERR(message) ::asn::Logger::error(message)
-#define ASN_DEBUG(message) ::asn::Logger::debug(message)
-#define ASN_INFO(message) ::asn::Logger::info(message)
+#define ASN_LOG(message) ::ASNLogger::Logger::log(message)
+#define ASN_ERR(message) ::ASNLogger::Logger::error(message)
+#define ASN_DEBUG(message) ::ASNLogger::Logger::debug(message)
+#define ASN_INFO(message) ::ASNLogger::Logger::info(message)

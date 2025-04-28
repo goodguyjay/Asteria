@@ -4,8 +4,6 @@ project(ASN-Station LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(include)
-
 find_package(spdlog REQUIRED)
 
 add_subdirectory(Argus)

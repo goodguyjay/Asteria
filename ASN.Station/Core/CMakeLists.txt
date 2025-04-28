@@ -3,5 +3,7 @@ add_library(Core
 )
 
 target_include_directories(Core PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+target_link_libraries(Core PRIVATE Common)
