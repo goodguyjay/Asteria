@@ -1,4 +1,4 @@
-use crate::{asn_debug, asn_info};
+use crate::{asn_debug, asn_err, asn_info};
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
@@ -25,6 +25,7 @@ pub struct Task {
     pub commands: Vec<String>,
     pub priority: TaskPriority,
     pub status: TaskStatus,
+    pub retries: u8,
 }
 
 impl Task {
@@ -34,6 +35,7 @@ impl Task {
             commands,
             priority,
             status: TaskStatus::Pending,
+            retries: 0,
         }
     }
 }
@@ -71,7 +73,7 @@ fn task_runner(queue: Arc<Mutex<VecDeque<Task>>>) {
                 task.id,
                 task.commands.join("; "),
                 task.commands.len(),
-                task.status,
+                TaskStatus::Running,
             );
 
             for (i, cmd) in task.commands.iter().enumerate() {
@@ -79,14 +81,44 @@ fn task_runner(queue: Arc<Mutex<VecDeque<Task>>>) {
                 std::thread::sleep(std::time::Duration::from_secs(8));
             }
 
-            // simulating
-            asn_info!("Task '{}' completed.", task.commands.join("; "));
+            let success = simulate_task_execution(&task);
 
-            task.status = TaskStatus::Completed;
+            if success {
+                asn_info!("Task {} completed successfully.", task.id);
+                task.status = TaskStatus::Completed;
+            } else {
+                task.retries += 1;
+
+                if task.retries < 5 {
+                    asn_err!(
+                        "Task {} failed (attempt {}/5). Retrying...",
+                        task.id,
+                        task.retries
+                    );
+
+                    {
+                        let mut q = queue.lock().unwrap();
+                        q.push_back(task.clone());
+                    }
+
+                    {
+                        let mut status_map = TASK_STATUS_MAP.lock().unwrap();
+                        status_map.insert(task.id, TaskStatus::Pending);
+                    }
+
+                    continue;
+                } else {
+                    asn_err!(
+                        "Task {} failed after 5 retries - marking as failed.",
+                        task.id
+                    );
+                    task.status = TaskStatus::Failed;
+                }
+            }
 
             {
                 let mut status_map = TASK_STATUS_MAP.lock().unwrap();
-                status_map.insert(task.id, TaskStatus::Completed);
+                status_map.insert(task.id, task.status);
             }
 
             asn_debug!(
@@ -107,4 +139,11 @@ fn task_runner(queue: Arc<Mutex<VecDeque<Task>>>) {
             *TASK_STATUS_MAP.lock().unwrap()
         );
     }
+}
+
+fn simulate_task_execution(task: &Task) -> bool {
+    use rand::Rng;
+    let mut rng = rand::rng();
+
+    rng.random_range(0..10) < 7
 }
