@@ -1,6 +1,7 @@
 mod handler;
 mod queue;
 mod server;
+mod task_manager;
 mod telemetry;
 mod utils;
 
